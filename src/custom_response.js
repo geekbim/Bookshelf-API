@@ -6,4 +6,14 @@ const customResponse = (h, status, msg, data) => {
     });
 };
 
-module.exports = customResponse;
+const customResponseWithoutData = (h, status, msg) => {
+    return h.response({
+        status: status,
+        message: msg,
+    });
+};
+
+module.exports = {
+    customResponse,
+    customResponseWithoutData,
+};

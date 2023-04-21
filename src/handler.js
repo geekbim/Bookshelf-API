@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
-const {bookValidate, Action} = require('./sanitizer');
-const customResponse = require('./custom_response');
+const { bookValidate, Action } = require('./sanitizer');
+const { customResponse, customResponseWithoutData } = require('./custom_response');
 
 const addBookHandler = (request, h) => {
     const { 
@@ -13,7 +13,7 @@ const addBookHandler = (request, h) => {
     try {
         bookValidate(request, Action.Create);
     } catch (err) {
-        const response = customResponse(h, "fail", err.message, null)
+        const response = customResponseWithoutData(h, "fail", err.message)
         response.code(400);
         return response;
     }
@@ -33,7 +33,7 @@ const addBookHandler = (request, h) => {
 
     const isSuccess = books.filter((book) => book.id === id).length > 0;
     if (!isSuccess) {
-        const response = customResponse(h, "fail", 'Buku gagal ditambahkan', null)
+        const response = customResponseWithoutData(h, "fail", 'Buku gagal ditambahkan')
         response.code(500);
         return response;
     }
@@ -92,12 +92,15 @@ const getBookByIdHandler = (request, h) => {
     const book = books.filter((n) => n.id === bookId)[0];
 
     if (book === undefined) {
-        const response = customResponse(h, "fail", 'Buku tidak ditemukan', null)
+        const response = customResponseWithoutData(h, "fail", 'Buku tidak ditemukan')
         response.code(404);
         return response;
     }
 
-    const response = customResponse(h, "success", 'Buku berhasil ditemukan', book)
+    data = {
+        book: book,
+    }
+    const response = customResponse(h, "success", 'Buku berhasil ditemukan', data)
     response.code(200);
     return response;
 };
@@ -115,7 +118,7 @@ const editBookByIdHandler = (request, h) => {
     try {
         bookValidate(request, Action.Update);
     } catch (err) {
-        const response = customResponse(h, "fail", err.message, null)
+        const response = customResponseWithoutData(h, "fail", err.message)
         response.code(400);
         return response;
     }
@@ -134,12 +137,12 @@ const editBookByIdHandler = (request, h) => {
             updatedAt,
         };
         
-        const response = customResponse(h, "success", 'Buku berhasil diperbarui', null)
+        const response = customResponseWithoutData(h, "success", 'Buku berhasil diperbarui')
         response.code(200);
         return response;
     }
 
-    const response = customResponse(h, "fail", 'Gagal memperbarui buku. Id tidak ditemukan', null)
+    const response = customResponseWithoutData(h, "fail", 'Gagal memperbarui buku. Id tidak ditemukan',)
     response.code(404);
     return response;
 };
@@ -150,14 +153,14 @@ const deleteBookByIdHandler = (request, h) => {
     const index = books.findIndex((book) => book.id === bookId);
 
     if (index === -1) {
-        const response = customResponse(h, "fail", 'Buku gagal dihapus. Id tidak ditemukan', null)
+        const response = customResponseWithoutData(h, "fail", 'Buku gagal dihapus. Id tidak ditemukan', null)
         response.code(404);
         return response;
     }
 
     books.splice(index, 1);
 
-    const response = customResponse(h, "success", 'Buku berhasil dihapus', null)
+    const response = customResponseWithoutData(h, "success", 'Buku berhasil dihapus', null)
     response.code(200);
     return response;
 };
