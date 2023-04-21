@@ -13,7 +13,7 @@ const customResponseWithoutData = (h, status, msg) => {
     });
 };
 
-module.exports = {
+export {
     customResponse,
     customResponseWithoutData,
 };

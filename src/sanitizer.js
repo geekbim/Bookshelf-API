@@ -26,7 +26,7 @@ const bookValidate = (request, action) => {
     }
 };
 
-module.exports = {
+export {
     Action,
     bookValidate,
 };

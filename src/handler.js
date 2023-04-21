@@ -1,7 +1,7 @@
-const { nanoid } = require('nanoid');
-const books = require('./books');
-const { bookValidate, Action } = require('./sanitizer');
-const { customResponse, customResponseWithoutData } = require('./custom_response');
+import { nanoid } from 'nanoid';
+import books from './books.js';
+import { bookValidate, Action } from './sanitizer.js';
+import { customResponse, customResponseWithoutData } from './custom_response.js';
 
 const addBookHandler = (request, h) => {
     const { 
@@ -97,7 +97,7 @@ const getBookByIdHandler = (request, h) => {
         return response;
     }
 
-    data = {
+    const data = {
         book: book,
     }
     const response = customResponse(h, "success", 'Buku berhasil ditemukan', data)
@@ -165,7 +165,7 @@ const deleteBookByIdHandler = (request, h) => {
     return response;
 };
 
-module.exports = { 
+export { 
     addBookHandler, 
     getAllBooksHandler, 
     getBookByIdHandler, 
